@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аренда автомобилей</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <nav>
+                <div class="logo">AutoRent</div>                <ul class="nav-menu">
+                    <li><a href="#" id="nav-home" class="active">Главная</a></li>
+                    <li><a href="#" id="nav-cars">Автомобили</a></li>
+                    <li><a href="#" id="nav-rentals" class="auth-required hidden">Мои аренды</a></li>
+                    <li><a href="#" id="nav-my-cars" class="owner-only auth-required hidden">Мои автомобили</a></li>
+                    <li><a href="#" id="nav-profile" class="auth-required hidden">Профиль</a></li>
+                    <li><a href="#" id="nav-admin" class="admin-only hidden">Админ</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button id="btn-login" class="btn not-logged-in">Войти</button>
+                    <button id="btn-register" class="btn not-logged-in">Регистрация</button>
+                    <button id="btn-logout" class="btn logged-in hidden">Выйти</button>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section id="home-section" class="section">
+                <div class="hero">
+                    <h1>Аренда автомобилей</h1>
+                    <p>Найдите идеальный автомобиль для ваших поездок</p>
+                    <button id="browse-cars" class="btn btn-primary">Посмотреть машины</button>
+                </div>
+
+                <div class="featured-cars">
+                    <h2>Популярные автомобили</h2>
+                    <div class="car-grid" id="featured-cars-grid">
+                    </div>
+                </div>
+            </section>
+
+            <section id="cars-section" class="section hidden">
+                <div class="filters">
+                    <h3>Фильтры</h3>
+                    <div class="filter-group">
+                        <label for="brand-filter">Марка:</label>
+                        <select id="brand-filter">
+                            <option value="">Все марки</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="body-type-filter">Тип кузова:</label>
+                        <select id="body-type-filter">
+                            <option value="">Все типы</option>
+                            <option value="sedan">Седан</option>
+                            <option value="suv">Внедорожник</option>
+                            <option value="hatchback">Хэтчбек</option>
+                            <option value="convertible">Кабриолет</option>
+                            <option value="coupe">Купе</option>
+                            <option value="minivan">Минивэн</option>
+                            <option value="pickup">Пикап</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="price-filter">Макс. цена/день:</label>
+                        <input type="range" id="price-filter" min="0" max="10000" step="500" value="10000">
+                        <span id="price-filter-value">10000 ₽</span>
+                    </div>
+                    <button id="apply-filters" class="btn">Применить фильтры</button>
+                </div>
+                <div class="car-list">
+                    <h2>Доступные автомобили</h2>
+                    <div class="car-grid" id="all-cars-grid">
+                    </div>
+                </div>
+            </section>
+
+            <div id="car-detail-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <div id="car-detail-content">
+                    </div>
+                </div>
+            </div>
+
+            <section id="rentals-section" class="section hidden auth-required">
+                <h2>Мои аренды</h2>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="upcoming">Предстоящие</button>
+                    <button class="tab-btn" data-tab="active">Активные</button>
+                    <button class="tab-btn" data-tab="completed">Завершенные</button>
+                </div>
+                <div id="rentals-list">
+                </div>
+            </section>
+
+            <section id="profile-section" class="section hidden auth-required">
+                <h2>Мой профиль</h2>
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <h3>Личная информация</h3>
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label for="firstName">Имя</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Фамилия</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Телефон</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            <button type="submit" class="btn">Сохранить изменения</button>
+                        </form>
+                    </div>
+                    <div class="profile-password">
+                        <h3>Изменить пароль</h3>
+                        <form id="password-form">
+                            <div class="form-group">
+                                <label for="currentPassword">Текущий пароль</label>
+                                <input type="password" id="currentPassword" name="currentPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Новый пароль</label>
+                                <input type="password" id="newPassword" name="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Подтвердите пароль</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn">Изменить пароль</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <div id="login-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Вход в систему</h2>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Пароль</label>
+                            <input type="password" id="login-password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    </form>
+                    <p class="form-toggle">Нет аккаунта? <a href="#" id="show-register">Зарегистрироваться</a></p>
+                </div>
+            </div>
+
+            <div id="register-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Регистрация</h2>
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-firstName">Имя</label>
+                            <input type="text" id="register-firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-lastName">Фамилия</label>
+                            <input type="text" id="register-lastName" name="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-phone">Телефон</label>
+                            <input type="tel" id="register-phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Пароль</label>
+                            <input type="password" id="register-password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirmPassword">Подтвердите пароль</label>
+                            <input type="password" id="register-confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Роль</label>
+                            <div class="radio-group">
+                                <input type="radio" id="role-tenant" name="role" value="tenant" checked>
+                                <label for="role-tenant">Арендатор</label>
+                                <input type="radio" id="role-owner" name="role" value="owner">
+                                <label for="role-owner">Владелец авто</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                    </form>
+                    <p class="form-toggle">Уже есть аккаунт? <a href="#" id="show-login">Войти</a></p>
+                </div>
+            </div>
+
+            <div id="rental-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Арендовать автомобиль</h2>
+                    <div id="rental-car-info">
+                    </div>
+                    <form id="rental-form">
+                        <input type="hidden" id="rental-car-id" name="carId">
+                        <div class="form-group">
+                            <label for="rental-start-date">Дата начала</label>
+                            <input type="date" id="rental-start-date" name="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rental-end-date">Дата окончания</label>
+                            <input type="date" id="rental-end-date" name="endDate" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="rental-with-driver" name="withDriver">
+                            <label for="rental-with-driver">С водителем</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="rental-pickup">Место получения</label>
+                            <input type="text" id="rental-pickup" name="pickupLocation" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rental-return">Место возврата</label>
+                            <input type="text" id="rental-return" name="returnLocation" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rental-notes">Примечания</label>
+                            <textarea id="rental-notes" name="notes"></textarea>
+                        </div>
+                        <div class="rental-price">
+                            <p>Итоговая стоимость: <span id="rental-total-price">0 ₽</span></p>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Оформить аренду</button>
+                    </form>                </div>
+            </div>
+
+            <section id="my-cars-section" class="section hidden auth-required owner-only">
+                <div class="section-header">
+                    <h2>Мои автомобили</h2>
+                    <button id="add-car-btn" class="btn btn-primary">Добавить автомобиль</button>
+                </div>
+
+                <div id="owner-cars-grid" class="car-grid">
+                </div>
+
+                <div id="car-form-modal" class="modal hidden">
+                    <div class="modal-content large-modal">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="car-form-title">Добавить автомобиль</h2>
+                        <form id="car-form">
+                            <input type="hidden" id="car-id" name="id">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="car-brand">Марка</label>
+                                    <input type="text" id="car-brand" name="brand" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="car-model">Модель</label>
+                                    <input type="text" id="car-model" name="model" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="car-year">Год выпуска</label>
+                                    <input type="number" id="car-year" name="year" required min="1900">
+                                </div>
+                                <div class="form-group">
+                                    <label for="car-registration">Регистрационный номер</label>
+                                    <input type="text" id="car-registration" name="registrationNumber" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="car-body-type">Тип кузова</label>
+                                    <select id="car-body-type" name="bodyType" required>
+                                        <option value="sedan">Седан</option>
+                                        <option value="suv">Внедорожник</option>
+                                        <option value="hatchback">Хэтчбек</option>
+                                        <option value="convertible">Кабриолет</option>
+                                        <option value="coupe">Купе</option>
+                                        <option value="minivan">Минивэн</option>
+                                        <option value="pickup">Пикап</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="car-color">Цвет</label>
+                                    <input type="text" id="car-color" name="color" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="car-seats">Количество мест</label>
+                                    <input type="number" id="car-seats" name="seats" required min="1" max="20">
+                                </div>
+                                <div class="form-group">
+                                    <label for="car-transmission">Коробка передач</label>
+                                    <select id="car-transmission" name="transmission" required>
+                                        <option value="automatic">Автоматическая</option>
+                                        <option value="manual">Механическая</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="car-fuel-type">Тип топлива</label>
+                                    <select id="car-fuel-type" name="fuelType" required>
+                                        <option value="petrol">Бензин</option>
+                                        <option value="diesel">Дизель</option>
+                                        <option value="electric">Электро</option>
+                                        <option value="hybrid">Гибрид</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="car-fuel-consumption">Расход топлива (л/100км)</label>
+                                    <input type="number" id="car-fuel-consumption" name="fuelConsumption" step="0.1" min="0" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="car-price-day">Цена за день (₽)</label>
+                                    <input type="number" id="car-price-day" name="pricePerDay" step="10" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="car-price-week">Цена за неделю (₽)</label>
+                                    <input type="number" id="car-price-week" name="pricePerWeek" step="10" min="0">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="car-price-month">Цена за месяц (₽)</label>
+                                    <input type="number" id="car-price-month" name="pricePerMonth" step="10" min="0">
+                                </div>
+                                <div class="form-group checkbox-group">
+                                    <input type="checkbox" id="car-driver" name="driverIncluded">
+                                    <label for="car-driver">С водителем</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="car-description">Описание</label>
+                                <textarea id="car-description" name="description" rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="car-features">Особенности (через запятую)</label>
+                                <input type="text" id="car-features" name="features" placeholder="Кондиционер, Подогрев сидений, GPS...">
+                            </div>                            <div class="form-group">
+                                <label for="car-image-url">Ссылка на изображение</label>
+                                <input type="text" id="car-image-url" name="imageUrl" placeholder="https://example.com/car.jpg">
+                            </div>
+                            <div class="form-group">
+                                <label for="car-image-file">Или загрузите изображение</label>
+                                <input type="file" id="car-image-file" name="imageFile" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <div id="image-preview" class="image-preview hidden"></div>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <input type="checkbox" id="car-available" name="isAvailable" checked>
+                                <label for="car-available">Доступен для аренды</label>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                                <button type="button" class="btn" id="cancel-car-form">Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AutoRent. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
