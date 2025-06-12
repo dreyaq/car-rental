@@ -3,7 +3,7 @@ const CONFIG = {
         API_BASE_URL: 'http://localhost:8080/api'
     },
     production: {
-        API_BASE_URL: 'https://autorent-backend.onrender.com/api'
+        API_BASE_URL: 'https://autorent-backend-abc123.onrender.com/api'
     }
 };
 
