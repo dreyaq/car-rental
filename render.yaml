@@ -32,11 +32,13 @@ services:
           property: password
       - key: RABBITMQ_URL
         value: amqp://guest:guest@localhost:5672/
-
-  - type: static
+  - type: web
     name: autorent-frontend
-    buildCommand: echo "No build needed"
-    staticPublishPath: ./frontend
+    env: docker
+    dockerfilePath: ./docker/frontend.prod.Dockerfile
+    envVars:
+      - key: PORT
+        value: 80
 
 databases:
   - name: autorent-db
