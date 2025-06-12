@@ -3,8 +3,9 @@ console.log('api.js файл загружен');
 
 class Api {
     constructor() {
-        this.baseUrl = '/api';
+        this.baseUrl = window.APP_CONFIG ? window.APP_CONFIG.API_BASE_URL : '/api';
         this.token = localStorage.getItem('token');
+        console.log('API Base URL:', this.baseUrl);
     }
 
     getHeaders() {

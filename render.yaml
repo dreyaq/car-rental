@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: autorent-backend
+    env: docker
+    dockerfilePath: ./docker/backend.prod.Dockerfile
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_HOST
+        fromDatabase:
+          name: autorent-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: autorent-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: autorent-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: autorent-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: autorent-db
+          property: password
+      - key: RABBITMQ_URL
+        value: amqp://guest:guest@localhost:5672/
+
+  - type: static
+    name: autorent-frontend
+    buildCommand: echo "No build needed"
+    staticPublishPath: ./frontend
+
+databases:
+  - name: autorent-db
+    databaseName: carrental
+    user: postgres
