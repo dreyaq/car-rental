@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"log"
+	"os"
 	"time"
 
 	"car-rental/config"
@@ -94,6 +95,12 @@ func sendReminderForUpcomingEndDates() {
 }
 
 func sendNotificationViaRabbitMQ(notification models.Notification) {
+	// Skip RabbitMQ in production
+	if os.Getenv("ENV") == "production" {
+		log.Printf("RabbitMQ disabled in production. Notification: %s", notification.Title)
+		return
+	}
+
 	notificationData, err := json.Marshal(notification)
 	if err != nil {
 		log.Printf("Error marshaling notification: %v", err)

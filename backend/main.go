@@ -22,13 +22,15 @@ func main() {
 	} else {
 		gin.SetMode(gin.DebugMode)
 	}
-
 	config.ConnectDB()
 
-	config.ConnectRabbitMQ()
-	defer config.CloseRabbitMQ()
+	// Connect to RabbitMQ only in development
+	if os.Getenv("ENV") != "production" {
+		config.ConnectRabbitMQ()
+		defer config.CloseRabbitMQ()
+		services.InitReminderService()
+	}
 
-	services.InitReminderService()
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
