@@ -1,6 +1,6 @@
 module car-rental
 
-go 1.23.1
+go 1.23
 
 require (
 	github.com/bytedance/sonic v1.13.2 // indirect
