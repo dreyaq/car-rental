@@ -24,15 +24,19 @@ func LoadEnv() {
 
 func ConnectDB() {
 	LoadEnv()
-
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
+	sslMode := "disable"
+	if os.Getenv("ENV") == "production" {
+		sslMode = "require"
+	}
+
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		dbHost, dbPort, dbUser, dbPassword, dbName, sslMode)
 
 	gormLogger := logger.Default
 	if os.Getenv("ENV") == "development" {
