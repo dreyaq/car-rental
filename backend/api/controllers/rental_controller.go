@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"encoding/json"
@@ -446,6 +447,10 @@ func notifyUser(userID uuid.UUID, rentalID uuid.UUID, title string, message stri
 	}
 
 	config.DB.Create(&notification)
+
+	if config.RabbitMQChannel == nil || os.Getenv("ENV") == "production" {
+		return
+	}
 
 	notificationData, err := json.Marshal(notification)
 	if err != nil {
