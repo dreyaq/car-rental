@@ -43,4 +43,3 @@ services:
 databases:
   - name: autorent-db
     databaseName: carrental
-    user: postgres
