@@ -99,11 +99,16 @@ func CreateCar(c *gin.Context) {
 		return
 	}
 
+	fmt.Printf("CreateCar - UserID: %v, Type: %T\n", userID, userID)
+
 	var req CreateCarRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Printf("CreateCar - JSON binding error: %v\n", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	fmt.Printf("CreateCar - Request data: %+v\n", req)
 	make := req.Make
 	if make == "" {
 		make = req.Brand

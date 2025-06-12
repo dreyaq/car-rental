@@ -14,12 +14,10 @@
                 <div class="logo">AutoRent</div>                <ul class="nav-menu">
                     <li><a href="#" id="nav-home" class="active">Главная</a></li>
                     <li><a href="#" id="nav-cars">Автомобили</a></li>
-                    <li><a href="#" id="nav-rentals" class="auth-required hidden">Мои аренды</a></li>
-                    <li><a href="#" id="nav-my-cars" class="owner-only auth-required hidden">Мои автомобили</a></li>
+                    <li><a href="#" id="nav-rentals" class="auth-required hidden">Мои аренды</a></li>                    <li><a href="#" id="nav-my-cars" class="owner-only auth-required hidden">Мои автомобили</a></li>
                     <li><a href="#" id="nav-profile" class="auth-required hidden">Профиль</a></li>
                     <li><a href="#" id="nav-admin" class="admin-only hidden">Админ</a></li>
-                </ul>
-                <div class="auth-buttons">
+                </ul>                <div class="auth-buttons">
                     <button id="btn-login" class="btn not-logged-in">Войти</button>
                     <button id="btn-register" class="btn not-logged-in">Регистрация</button>
                     <button id="btn-logout" class="btn logged-in hidden">Выйти</button>
@@ -84,15 +82,23 @@
                     <div id="car-detail-content">
                     </div>
                 </div>
-            </div>
-
-            <section id="rentals-section" class="section hidden auth-required">
-                <h2>Мои аренды</h2>
-                <div class="tabs">
+            </div>            <section id="rentals-section" class="section hidden auth-required">
+                <h2 id="rentals-title">Мои аренды</h2>
+                
+                <!-- Вкладки для арендаторов -->
+                <div id="tenant-rental-tabs" class="tabs tenant-only">
                     <button class="tab-btn active" data-tab="upcoming">Предстоящие</button>
                     <button class="tab-btn" data-tab="active">Активные</button>
                     <button class="tab-btn" data-tab="completed">Завершенные</button>
                 </div>
+                
+                <!-- Вкладки для владельцев -->
+                <div id="owner-rental-tabs" class="tabs owner-only">
+                    <button class="tab-btn active" data-tab="pending">Ожидающие</button>
+                    <button class="tab-btn" data-tab="confirmed">Подтвержденные</button>
+                    <button class="tab-btn" data-tab="all">Все</button>
+                </div>
+                
                 <div id="rentals-list">
                 </div>
             </section>
@@ -245,6 +251,17 @@
                     </form>                </div>
             </div>
 
+            <!-- Модальное окно для деталей аренды -->
+            <div id="rental-detail-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Детали аренды</h2>
+                    <div id="rental-detail-content">
+                        <!-- Содержимое будет загружено динамически -->
+                    </div>
+                </div>
+            </div>
+
             <section id="my-cars-section" class="section hidden auth-required owner-only">
                 <div class="section-header">
                     <h2>Мои автомобили</h2>
@@ -352,18 +369,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="car-features">Особенности (через запятую)</label>
-                                <input type="text" id="car-features" name="features" placeholder="Кондиционер, Подогрев сидений, GPS...">
-                            </div>                            <div class="form-group">
-                                <label for="car-image-url">Ссылка на изображение</label>
-                                <input type="text" id="car-image-url" name="imageUrl" placeholder="https://example.com/car.jpg">
-                            </div>
-                            <div class="form-group">
-                                <label for="car-image-file">Или загрузите изображение</label>
-                                <input type="file" id="car-image-file" name="imageFile" accept="image/*">
-                            </div>
-                            <div class="form-group">
-                                <div id="image-preview" class="image-preview hidden"></div>
-                            </div>
+                                <input type="text" id="car-features" name="features" placeholder="Кондиционер, Подогрев сидений, GPS...">                            </div>
                             <div class="form-group checkbox-group">
                                 <input type="checkbox" id="car-available" name="isAvailable" checked>
                                 <label for="car-available">Доступен для аренды</label>
@@ -373,17 +379,13 @@
                                 <button type="button" class="btn" id="cancel-car-form">Отмена</button>
                             </div>
                         </form>
-                    </div>
-                </div>
-            </section>
-        </main>
+                    </div>                </div>
+            </section>        </main>
 
         <footer>
             <p>&copy; 2025 AutoRent. Все права защищены.</p>
         </footer>
-    </div>
-
-    <script src="js/api.js"></script>
+    </div>    <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
 </body>

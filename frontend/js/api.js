@@ -1,3 +1,6 @@
+// Debug: API.js loaded
+console.log('api.js файл загружен');
+
 class Api {
     constructor() {
         this.baseUrl = '/api';
@@ -119,6 +122,10 @@ class Api {
         return this.request(`/owner/cars/${id}`);
     }
 
+    async getOwnerCars() {
+        return this.request('/owner/cars');
+    }
+
     async getCarFeatures() {
         return this.request('/features');
     }
@@ -172,19 +179,24 @@ class Api {
 
     async createRental(rentalData) {
         return this.request('/rentals', 'POST', rentalData);
+    }    async updateRentalStatus(id, status) {
+        return this.request(`/rentals/${id}/status`, 'PATCH', { status });
+    }    // Owner rental methods
+    async getOwnerRentals() {
+        return this.request('/rentals');
+    }async approveRental(id) {
+        return this.request(`/rentals/${id}/status`, 'PATCH', { status: 'confirmed' });
     }
 
-    async updateRentalStatus(id, status) {
-        return this.request(`/rentals/${id}/status`, 'PATCH', { status });
+    async rejectRental(id, reason = '') {
+        return this.request(`/rentals/${id}/status`, 'PATCH', { status: 'cancelled' });
     }
 
     async getNotifications() {
         return this.request('/notifications');
-    }
-
-    async markNotificationAsRead(id) {
+    }    async markNotificationAsRead(id) {
         return this.request(`/notifications/${id}/read`, 'PATCH');
     }
 }
 
-const api = new Api();
+// API будет инициализирован в app.js
